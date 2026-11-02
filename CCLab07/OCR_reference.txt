@@ -1,0 +1,38 @@
+OCR transcription from source pages; verify against original before compiling.
+
+Name - Arpita Waghmare
+PRN - 24070521006
+
+Batch-A1
+
+Yl
+#include<stdio.h>
+%}
+
+%%
+-*COM {printf("valid String");}
+* {printf("invalid string");}
+
+%%
+
+int main({
+
+printf("enter the sentence:\n" );
+yylex();
+
+return 0;
+
+}
+
+int yywrap()
+
+{
+
+return 1;
+
+}
+
+Name - Arpita Waghmare
+PRN - 24070521006
+
+Batch-A1
