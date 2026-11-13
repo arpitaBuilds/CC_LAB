@@ -1,65 +1,63 @@
+
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int yylex();
-void yyerror(char *);
-int temp = 1;
+void yyerror(char *s);
 
-char* newtemp()
-{
-    char *s = malloc(10);
-    sprintf(s, "t%d", temp++);
-    return s;
-}
+int t = 1;
 %}
 
-%union {
-    char *place;
+%token ID NUM
+
+%left '+' '-'
+%left '*' '/'
+
+%%
+S : E {
+        printf("Result: %d\n", $1);
+    }
+  ;
+
+E : E '+' E {
+        $$ = $1 + $3;
+        printf("t%d = %d + %d\n", t, $1, $3);
+        t++;
+    }
+
+  | E '-' E {
+        $$ = $1 - $3;
+        printf("t%d = %d - %d\n", t, $1, $3);
+        t++;
+    }
+
+  | E '*' E {
+        $$ = $1 * $3;
+        printf("t%d = %d * %d\n", t, $1, $3);
+        t++;
+    }
+
+  | E '/' E {
+        $$ = $1 / $3;
+        printf("t%d = %d / %d\n", t, $1, $3);
+        t++;
+    }
+
+  | NUM {
+        $$ = $1;
+    }
+
+  | ID {
+        $$ = $1;
+    }
+  ;
+%%
+
+void yyerror(char *s)
+{
+    printf("Error: %s\n", s);
 }
-
-%token <place> ID
-%type <place> E T F
-
-%left '+'
-%left '*'
-
-%%
-I : ID '=' E
-    {
-        printf("%s = %s\n", $1, $3);
-    }
-    ;
-
-E : E '+' T
-    {
-        $$ = newtemp();
-        printf("%s = %s + %s\n", $$, $1, $3);
-    }
-  | T
-    {
-        $$ = $1;
-    }
-    ;
-
-T : T '*' F
-    {
-        $$ = newtemp();
-        printf("%s = %s * %s\n", $$, $1, $3);
-    }
-  | F
-    {
-        $$ = $1;
-    }
-    ;
-
-F : ID
-    {
-        $$ = $1;
-    }
-    ;
-%%
 
 int main()
 {
